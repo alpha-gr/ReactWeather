@@ -1,5 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { fetchWeatherApi } from 'openmeteo';
+import React , { useState } from 'react'
+import DayCard from './DayCard';
+const styles = require('../styles.js')
+
+export default function DailyWeather() {
+
+const { isLoaded } = useState(false)
 
 const params = {
 	"latitude": 44.4938,
@@ -12,12 +19,12 @@ const response = fetchWeatherApi(url, params);
 
 // Helper function to form time ranges
 const range = (start, stop, step) =>
-	Array.from({ length: (stop - start) / step }, (_, i) => start + i * step);
+Array.from({ length: (stop - start) / step }, (_, i) => start + i * step);
 
-// Process first location. Add a for-loop for multiple locations or weather models
+let weatherData = null
 
 response.then(
-	() => {
+	(response) => {
 		// Attributes for timezone and location
 		console.log(response)
 		const utcOffsetSeconds = response.utcOffsetSeconds();
@@ -29,7 +36,7 @@ response.then(
 		const daily = response.daily();
 
 		// Note: The order of weather variables in the URL query and the indices below need to match!
-		const weatherData = {
+		weatherData = {
 
 			daily: {
 				time: range(Number(daily.time()), Number(daily.timeEnd()), daily.interval()).map(
@@ -49,17 +56,18 @@ response.then(
 				weatherData.daily.temperature2mMin[i]
 			);
 		}
+		setIsLoaded(true)
 	}
 )
 
-export default function DailyWeather() {
+
     return (
         <View>
-            <Text style={{ color: '#fff' }}>
-                weather for tomorrow:<br/>
-                max temp: {}<br/>
-		        min temp: {}<br/>
-            </Text>
+			{isLoaded ? 
+				<DayCard weatherData={weatherData}></DayCard> 
+				: 
+				<Text style={styles.text}>Loading...</Text>
+			}
         </View>
     );
 }
