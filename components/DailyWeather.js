@@ -6,7 +6,7 @@ const styles = require('../styles.js')
 
 export default function DailyWeather() {
 
-const { isLoaded } = useState(false)
+const [ isLoaded, setIsLoaded ] = useState(false)
 
 const params = {
 	"latitude": 44.4938,
@@ -56,11 +56,8 @@ response.then(
 				weatherData.daily.temperature2mMin[i]
 			);
 		}
-		setIsLoaded(true)
 	}
 )
-
-
     return (
         <View>
 			{isLoaded ? 
