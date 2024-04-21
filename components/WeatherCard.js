@@ -14,12 +14,13 @@ export default function WeatherCard() {
     if(!isLoaded){
         weatherData = getWeatherData()
         weatherData.then((data) => {
-            console.log("weather data fetched successfully")
-            console.log(data)
             weatherData= data
             setIsLoaded(true)
-
-        })
+        },
+        (error) => {
+            console.log(error)
+        }
+    )
     }
 
 

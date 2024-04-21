@@ -1,10 +1,10 @@
 import { fetchWeatherApi } from 'openmeteo';
 
-export function getWeatherData(): Promise<any> {
+export function getWeatherData(props) {
     return new Promise((resolve, reject) => {
         const params = {
-			"latitude": 52.52,
-			"longitude": 13.41,
+			"latitude": 44.49381,
+			"longitude": 11.33875,
 			"current": ["temperature_2m", "is_day", "weather_code"],
 			"timezone": "auto",
 			"forecast_days": 1
@@ -23,15 +23,15 @@ export function getWeatherData(): Promise<any> {
                 const latitude = response.latitude();
                 const longitude = response.longitude();
 
-                const current = response.current()!;
+                const current = response.current();
 
                 // Note: The order of weather variables in the URL query and the indices below need to match!
                 const weatherData = {
                     current: {
                         time: new Date((Number(current.time()) + utcOffsetSeconds) * 1000),
-                        temperature2m: current.variables(0)!.value(),
-                        isDay: current.variables(1)!.value(),
-                        weatherCode: current.variables(2)!.value(),
+                        temperature2m: current.variables(0).value(),
+                        isDay: current.variables(1).value(),
+                        weatherCode: current.variables(2).value(),
                     },
                 };
 				//log the weather data
