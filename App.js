@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
 import DailyWeather from './components/DailyWeather.js'
 import CurrentWeatherCard from './components/CurrentWeatherCard.js';
-const styles = require('./styles.js')
+import styles from './styles.js';
 import { StrictMode, useState } from 'react';
 import { Button, Searchbar,  Surface, Text , Banner} from 'react-native-paper';
 
@@ -25,7 +25,12 @@ export default function App() {
         </Appbar.Header>
         <Surface style={styles.main}>
           <Search onClick={(city) =>{setCity(city)} }></Search>
-          {city!=null && <CurrentWeatherCard city={city}/> }
+          {city!=null && 
+            <>
+              <Text style={styles.h1}>{city.name}</Text>
+              <CurrentWeatherCard city={city}/>   
+            </>
+          }
           <StatusBar style="auto" />
         </Surface>
       </PaperProvider>

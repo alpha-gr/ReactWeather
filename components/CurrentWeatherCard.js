@@ -1,6 +1,6 @@
 
 import React , { useState, Alert, useEffect } from 'react'
-import { getWeatherData } from './weather';
+import { getCurrentWeatherData } from './weather';
 import WeatherCode from './WeatherCode';
 import { Text, Card, ActivityIndicator} from 'react-native-paper'
 import { View } from 'react-native';
@@ -24,7 +24,7 @@ export default function CurrentWeatherCard(props) {
         }
         setIsLoaded(false)
 
-        getWeatherData(city)
+        getCurrentWeatherData(city)
         .then(data => {
             if(!ignore){
                 console.log(data)
@@ -43,7 +43,6 @@ export default function CurrentWeatherCard(props) {
 
     return(
         <View>
-            <Text>Current Weather in {city.name}:</Text>
             <Card elevation={3}>
                 {isLoaded ? <WeatherCode weatherData={weatherData["current"]}/> 
                 : 

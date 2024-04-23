@@ -4,13 +4,14 @@ import { List, Portal, Searchbar, Text } from 'react-native-paper'
 descriptions = require('./WeatherDescriptions.js') //import the descriptions
 import { useState, useEffect } from 'react'
 import CountryFlag from 'react-native-country-flag';
-
+import styles from '../styles.js';
+const max_fetch_results = 5
 
 export default function Search(props){
     const [ city, setCity ] = useState('')
     return (
         <>
-            <Searchbar placeholder='enter city or postal code' 
+            <Searchbar style={styles.search} placeholder='enter city or postal code' 
                 value={city}
                 onChangeText={ (newCity) => {setCity(newCity)} }
             />
@@ -33,7 +34,7 @@ function CityList(props){
             return
         }
 
-        fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=5&language=en&format=json`)
+        fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=${max_fetch_results}&language=en&format=json`)
         .then(response => response.json())
         .then(data => {
             if(!ignore){

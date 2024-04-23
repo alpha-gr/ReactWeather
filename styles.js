@@ -4,10 +4,7 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text:{
-    color:'#ffff'
+    justifyContent: 'flex-start',
   },
   h1: {
     fontSize: 24,
@@ -36,6 +33,14 @@ const styles = StyleSheet.create({
     size: 'auto',
     padding: '1%',
   },
+  search: {
+    width: '90%', 
+    marginTop: 20,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
 });
+
+module.exports = styles;
 
 module.exports = styles

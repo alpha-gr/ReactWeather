@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { fetchWeatherApi } from 'openmeteo';
 import React , { useState } from 'react'
-import DayCard from './DayCard';
+//import DayCard from './DayCard';
 const styles = require('../styles.js')
 
 export default function DailyWeather() {
