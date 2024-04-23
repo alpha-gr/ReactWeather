@@ -1,10 +1,12 @@
 import { fetchWeatherApi } from 'openmeteo';
 
-export function getWeatherData(props) {
+export function getWeatherData(city) {
+
+
     return new Promise((resolve, reject) => {
         const params = {
-			"latitude": 44.49381,
-			"longitude": 11.33875,
+			"latitude": city.latitude,
+			"longitude": city.longitude,
 			"current": ["temperature_2m", "is_day", "weather_code"],
 			"timezone": "auto",
 			"forecast_days": 1

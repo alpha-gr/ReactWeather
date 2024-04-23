@@ -3,7 +3,6 @@
 //weather codes are WMO codes
 import { View, Image} from 'react-native'
 import { Text } from 'react-native-paper'
-import AppText from './AppText.js'
 descriptions = require('./WeatherDescriptions.js') //import the descriptions
 
 export default function WeatherCode(weatherData){
