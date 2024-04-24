@@ -1,6 +1,6 @@
 import { fetchWeatherApi } from 'openmeteo';
 
-export function getCurrentWeatherData(city) {
+export function getWeatherData(city) {
 
     return new Promise((resolve, reject) => {
         const params = {
