@@ -11,7 +11,7 @@ import * as encoding from 'text-encoding'
 import { MD3DarkTheme as DefaultTheme, PaperProvider, Appbar } from 'react-native-paper';
 import Search from './components/Search'
 import { getWeatherData } from './components/weather.js';
-
+//weatherData = null
 
 export default function App() {
   
@@ -32,10 +32,11 @@ export default function App() {
     getWeatherData(city)
     .then(data => {
         if(!ignore){
-            weatherData=data
-            setIsLoaded(true)
-            setIsLoading(false)
-            console.log(weatherData)
+          setIsLoaded(true)
+          setIsLoading(false)
+          weatherData=data
+          console.log("App.js: Weather data fetched")
+          console.log(weatherData)
         }
     },
     (error) => {
@@ -44,11 +45,11 @@ export default function App() {
     }
     )
     return () => { ignore = true }
-  }, [city]);
+  }, [city, isLoaded, isLoading]);
 
   
   return (
-    <StrictMode>
+
       <PaperProvider>
         <Appbar.Header elevated="true">
           <Appbar.Content title="Weather App" />
@@ -61,12 +62,12 @@ export default function App() {
             <>
               <Text style={styles.h1}>{city.name}</Text>
               <CurrentWeatherCard weatherData={weatherData}/> 
-              <WeatherBar weatherData={weatherData}/>  
+              {/* <WeatherBar weatherData={weatherData}/>   */}
             </>
           }
           <StatusBar style="auto" />
         </Surface>
       </PaperProvider>
-    </StrictMode>
+ 
   );
 }

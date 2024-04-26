@@ -18,7 +18,7 @@ export default function WeatherCode(props){
     let time = weatherData["isDay"] == 1 ? "day" : "night"
     let description = descriptions[code][time]["description"]
     let image = descriptions[code][time]["image"]
-    console.log(weatherData["time"])
+    //console.log(weatherData["time"])
     return (
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' , padding:10}}>
             <Text style={{ fontSize: 30 }}>{weatherData.temperature2m.toFixed(0)}°</Text>
