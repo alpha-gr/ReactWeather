@@ -38,8 +38,7 @@ function CityList(props){
         .then(response => response.json())
         .then(data => {
             if(!ignore){
-                console.log('received data')
-                console.log(data)
+                console.log('received search data')
                 setCityList(data.results)
             }
         })
