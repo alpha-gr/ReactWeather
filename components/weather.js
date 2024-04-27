@@ -5,7 +5,7 @@ const forecast_days = 7;
 range = (start, stop, step) =>
 	Array.from({ length: (stop - start) / step }, (_, i) => start + i * step);
 
-export function getCurrentWeatherData(city) {
+export function getWeatherData(city) {
 
     return new Promise((resolve, reject) => {
         const params = {

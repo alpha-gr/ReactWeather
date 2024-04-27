@@ -1,11 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-
+import DailyWeatherCard from './components/DailyWeatherCard.js'
 import WeatherBar from './components/WeatherBar'
 import CurrentWeatherCard from './components/CurrentWeatherCard.js';
 import styles from './styles.js';
 import { StrictMode, useState } from 'react';
-import { ActivityIndicator, Surface, Text } from 'react-native-paper';
-import { useEffect } from 'react';
+import { Surface, Text } from 'react-native-paper';
 
 //the line below fixes a bug with Expo Go go not recognizing TextEncoder DO NOT REMOVE
 import * as encoding from 'text-encoding'
@@ -63,8 +62,8 @@ export default function App() {
           {isLoaded &&
             <>
               <Text style={styles.h1}>{city.name}</Text>
-              <CurrentWeatherCard city={city}/> 
-              <WeatherBar/>  
+              <CurrentWeatherCard weatherData={weatherData}/> 
+              {/* <WeatherBar weatherData={weatherData}/>   */}
             </>
           }
           <StatusBar style="auto" />
