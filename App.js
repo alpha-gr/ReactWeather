@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import DailyWeatherCard from './components/DailyWeatherCard.js'
 import WeatherBar from './components/WeatherBar'
+import { ActivityIndicator } from 'react-native';
+import React, { useEffect } from 'react';
 import CurrentWeatherCard from './components/CurrentWeatherCard.js';
 import styles from './styles.js';
 import { StrictMode, useState } from 'react';
@@ -11,32 +12,33 @@ import * as encoding from 'text-encoding'
 
 import { MD3DarkTheme as DefaultTheme, PaperProvider, Appbar } from 'react-native-paper';
 import Search from './components/Search'
-import { getCurrentWeatherData } from './components/weather.js';
+import { getWeatherData } from './components/weather.js';
 //weatherData = null
 
 export default function App() {
   
   const [city, setCity] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading  , setIsLoading] = useState(false);
+  const [weatherData, setWeatherData] = useState(null);
 
   useEffect(() => {
     let ignore = false //to prevent race conditions
 
-    if(city==null){
+    if(city==null || isLoading || isLoaded){
         return
     } 
 
     setIsLoaded(false)
     setIsLoading(true)
 
-    getCurrentWeatherData(city)
+    getWeatherData(city)
     .then(data => {
         if(!ignore){
           setIsLoaded(true)
           setIsLoading(false)
-          weatherData=data
-          console.log("App.js: Weather data fetched")
+          setWeatherData(data)
+          console.log("App.js: Weather data received")
           console.log(weatherData)
         }
     },
@@ -46,7 +48,7 @@ export default function App() {
     }
     )
     return () => { ignore = true }
-  }, [city, isLoaded, isLoading]);
+  }, [city]);
 
   
   return (
@@ -56,7 +58,7 @@ export default function App() {
           <Appbar.Content title="Weather App" />
         </Appbar.Header>
         <Surface style={styles.main}>
-          <Search onClick={(city) =>{setCity(city)} }></Search>
+          <Search onClick={(city) =>{setCity(city); setIsLoaded(false)} }></Search>
 
           {isLoading && <ActivityIndicator animating={true} />}
           {isLoaded &&

@@ -65,34 +65,34 @@ export function getWeatherData(city) {
                 };
                 // `weatherData` now contains a simple structure with arrays for datetime and weather data
 
-                // // put the daily weather data in an array
-                // let dailyDataArray = [];
-                // for (let i = 0; i < forecast_days; i++) {
-                //     dailyDataArray.push({
-                //         time: weatherData.daily.time[i],
-                //         weatherCode: weatherData.daily.weatherCode[i],
-                //         temperature2mMax: weatherData.daily.temperature2mMax[i],
-                //         temperature2mMin: weatherData.daily.temperature2mMin[i],
-                //     });
-                // }
-                // weatherData.dailyDataArray = dailyDataArray;
+                // put the daily weather data in an array
+                let dailyDataArray = [];
+                for (let i = 0; i < forecast_days; i++) {
+                    dailyDataArray.push({
+                        time: weatherData.daily.time[i],
+                        weatherCode: weatherData.daily.weatherCode[i],
+                        temperature2mMax: weatherData.daily.temperature2mMax[i],
+                        temperature2mMin: weatherData.daily.temperature2mMin[i],
+                    });
+                }
+                weatherData.dailyDataArray = dailyDataArray;
 
-                // // put the hourly weather data in an array, each day contains the hourly data for that day
-                //  let hourlyDataArray = [];
-                // for (let i = 0; i < forecast_days; i++) {
-                //     let hourlyData = [];
-                //     for (let j = 0; j < 24; j++) {
-                //         hourlyData.push({
-                //             time: weatherData.hourly.time[i * 24 + j],
-                //             temperature2m: weatherData.hourly.temperature2m[i * 24 + j],
-                //             precipitationProbability: weatherData.hourly.precipitationProbability[i * 24 + j],
-                //             precipitation: weatherData.hourly.precipitation[i * 24 + j],
-                //             weatherCode: weatherData.hourly.weatherCode[i * 24 + j],
-                //         });
-                //     }
-                //     hourlyDataArray.push(hourlyData);
-                // }
-                // weatherData.hourlyDataArray = hourlyDataArray;
+                // put the hourly weather data in an array, each day contains the hourly data for that day
+                 let hourlyDataArray = [];
+                for (let i = 0; i < forecast_days; i++) {
+                    let hourlyData = [];
+                    for (let j = 0; j < 24; j++) {
+                        hourlyData.push({
+                            time: weatherData.hourly.time[i * 24 + j],
+                            temperature2m: weatherData.hourly.temperature2m[i * 24 + j],
+                            precipitationProbability: weatherData.hourly.precipitationProbability[i * 24 + j],
+                            precipitation: weatherData.hourly.precipitation[i * 24 + j],
+                            weatherCode: weatherData.hourly.weatherCode[i * 24 + j],
+                        });
+                    }
+                    hourlyDataArray.push(hourlyData);
+                }
+                weatherData.hourlyDataArray = hourlyDataArray;
 
 				//log the weather data
                 console.log("weather.js: weather data fetched")
