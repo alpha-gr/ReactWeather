@@ -1,4 +1,4 @@
-descriptions = {
+export default descriptions = {
 	"0":{
 		"day":{
 			"description":"Sunny",
@@ -280,5 +280,3 @@ descriptions = {
 		}
 	}
 }
-
-module.exports = descriptions	//export the descriptions

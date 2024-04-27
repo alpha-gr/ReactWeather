@@ -39,6 +39,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 10,
   },
+  scroll: {
+    width: '100%',
+  },
 });
 
 module.exports = styles;

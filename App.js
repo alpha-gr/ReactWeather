@@ -1,18 +1,19 @@
+//the line below fixes a bug with Expo Go go not recognizing TextEncoder DO NOT REMOVE
+import * as encoding from 'text-encoding'
+
 import { StatusBar } from 'expo-status-bar';
-import WeatherBar from './components/WeatherBar'
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, ScrollView } from 'react-native';
 import React, { useEffect } from 'react';
 import CurrentWeatherCard from './components/CurrentWeatherCard.js';
 import styles from './styles.js';
 import { StrictMode, useState } from 'react';
 import { Surface, Text } from 'react-native-paper';
-
-//the line below fixes a bug with Expo Go go not recognizing TextEncoder DO NOT REMOVE
-import * as encoding from 'text-encoding'
-
 import { MD3DarkTheme as DefaultTheme, PaperProvider, Appbar } from 'react-native-paper';
 import Search from './components/Search'
 import { getWeatherData } from './components/weather.js';
+import DailyWeatherBar from './components/DailyWeatherBar';
+import Forecast from './components/Forecast.js';
+
 //weatherData = null
 
 export default function App() {
@@ -35,11 +36,11 @@ export default function App() {
     getWeatherData(city)
     .then(data => {
         if(!ignore){
+          console.log("App.js: Weather data received")
+          setWeatherData(data)
+          //console.log(weatherData)
           setIsLoaded(true)
           setIsLoading(false)
-          setWeatherData(data)
-          console.log("App.js: Weather data received")
-          console.log(weatherData)
         }
     },
     (error) => {
@@ -52,25 +53,24 @@ export default function App() {
 
   
   return (
-
-      <PaperProvider>
-        <Appbar.Header elevated="true">
-          <Appbar.Content title="Weather App" />
-        </Appbar.Header>
-        <Surface style={styles.main}>
-          <Search onClick={(city) =>{setCity(city); setIsLoaded(false)} }></Search>
-
-          {isLoading && <ActivityIndicator animating={true} />}
-          {isLoaded &&
-            <>
-              <Text style={styles.h1}>{city.name}</Text>
-              <CurrentWeatherCard weatherData={weatherData}/> 
-              {/* <WeatherBar weatherData={weatherData}/>   */}
-            </>
-          }
-          <StatusBar style="auto" />
-        </Surface>
-      </PaperProvider>
- 
+    <PaperProvider>
+      <Appbar.Header elevated="true">
+        <Appbar.Content title="Weather App" />
+      </Appbar.Header>
+      <Surface style={styles.main}>
+        <ScrollView style={styles.scroll}>
+        <Search onClick={(city) =>{setCity(city); setIsLoaded(false)} }></Search>
+        {isLoading && <ActivityIndicator animating={true} />}
+        {isLoaded && 
+          <>
+            <Text style={styles.h1}>{city.name}</Text>
+            <CurrentWeatherCard weatherData={weatherData["current"]}/> 
+            <Forecast weatherData={weatherData}/>  
+          </>
+        }
+        </ScrollView>
+        <StatusBar style="auto" />
+      </Surface>
+    </PaperProvider>
   );
 }

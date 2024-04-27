@@ -12,7 +12,7 @@ export function getWeatherData(city) {
 			"latitude": city.latitude,
 			"longitude": city.longitude,
 			"current": ["temperature_2m", "is_day", "weather_code"],
-            "hourly": ["temperature_2m", "precipitation_probability", "precipitation", "weather_code"],
+            "hourly": ["temperature_2m", "precipitation_probability", "precipitation", "weather_code", "is_day"],
 	        "daily": ["weather_code", "temperature_2m_max", "temperature_2m_min"],
 			"timezone": "auto",
 			"forecast_days": forecast_days
@@ -75,7 +75,7 @@ export function getWeatherData(city) {
                         temperature2mMin: weatherData.daily.temperature2mMin[i],
                     });
                 }
-                weatherData.dailyDataArray = dailyDataArray;
+                weatherData.dailyData = dailyDataArray;
 
                 // put the hourly weather data in an array, each day contains the hourly data for that day
                  let hourlyDataArray = [];
@@ -92,11 +92,11 @@ export function getWeatherData(city) {
                     }
                     hourlyDataArray.push(hourlyData);
                 }
-                weatherData.hourlyDataArray = hourlyDataArray;
+                weatherData.hourlyData = hourlyDataArray;
 
 				//log the weather data
                 console.log("weather.js: weather data fetched")
-				console.log(weatherData);
+				//console.log(weatherData);
 
                 resolve(weatherData);
             })
