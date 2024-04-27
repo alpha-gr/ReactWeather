@@ -1,17 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import DailyWeatherCard from './components/DailyWeatherCard.js'
+
 import WeatherBar from './components/WeatherBar'
 import CurrentWeatherCard from './components/CurrentWeatherCard.js';
 import styles from './styles.js';
 import { StrictMode, useState } from 'react';
-import { Surface, Text } from 'react-native-paper';
+import { ActivityIndicator, Surface, Text } from 'react-native-paper';
+import { useEffect } from 'react';
 
 //the line below fixes a bug with Expo Go go not recognizing TextEncoder DO NOT REMOVE
 import * as encoding from 'text-encoding'
 
 import { MD3DarkTheme as DefaultTheme, PaperProvider, Appbar } from 'react-native-paper';
 import Search from './components/Search'
-import { getWeatherData } from './components/weather.js';
+import { getCurrentWeatherData } from './components/weather.js';
 //weatherData = null
 
 export default function App() {
@@ -30,7 +31,7 @@ export default function App() {
     setIsLoaded(false)
     setIsLoading(true)
 
-    getWeatherData(city)
+    getCurrentWeatherData(city)
     .then(data => {
         if(!ignore){
           setIsLoaded(true)
