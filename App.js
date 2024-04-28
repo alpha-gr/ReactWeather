@@ -2,19 +2,45 @@
 import * as encoding from 'text-encoding'
 
 import { StatusBar } from 'expo-status-bar';
-import { ActivityIndicator, ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import React, { useEffect } from 'react';
 import CurrentWeatherCard from './components/CurrentWeatherCard.js';
 import styles from './styles.js';
 import { StrictMode, useState } from 'react';
-import { Surface, Text } from 'react-native-paper';
-import { MD3DarkTheme as DefaultTheme, PaperProvider, Appbar } from 'react-native-paper';
+import { IconButton, Surface, Text } from 'react-native-paper';
+import { PaperProvider, Appbar, Button, ActivityIndicator } from 'react-native-paper';
 import Search from './components/Search'
 import { getWeatherData } from './components/weather.js';
-import DailyWeatherBar from './components/DailyWeatherBar';
 import Forecast from './components/Forecast.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Location from 'expo-location';
 
 //weatherData = null
+
+// _storeData = async () => {
+//   try {
+//     await AsyncStorage.setItem(
+//       'CITY',
+//       'Bologna',
+//     );
+//   } catch (error) {
+//     // Error saving data
+//     console.log(error)
+//   }
+// };
+
+// _retrieveData = async () => {
+//   try {
+//     const value = await AsyncStorage.getItem('CITY');
+//     if (value !== null) {
+//       // We have data!!
+//       console.log('cached data: '+ value);
+//     }
+//   } catch (error) {
+//     // Error retrieving data
+//     console.log(error)
+//   }
+// };
 
 export default function App() {
   
@@ -22,17 +48,19 @@ export default function App() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading  , setIsLoading] = useState(false);
   const [weatherData, setWeatherData] = useState(null);
+  const [usePosition, setUsePosition] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => {//FETCH WEATHER DATA
     let ignore = false //to prevent race conditions
 
-    if(city==null || isLoading || isLoaded){
+    if(city==null || isLoading || isLoaded || usePosition){
         return
     } 
 
     setIsLoaded(false)
     setIsLoading(true)
 
+    console.log(city)
     getWeatherData(city)
     .then(data => {
         if(!ignore){
@@ -51,20 +79,68 @@ export default function App() {
     return () => { ignore = true }
   }, [city]);
 
+  useEffect(() => {//FETCH GEOLOCATION DATA
+    let ignore = false //to prevent race conditions
+    console.log("usePosition: "+ usePosition)
+    if(usePosition==false || isLoading || isLoaded){
+        return
+    } 
+
+    setIsLoaded(false)
+
+    Location.requestForegroundPermissionsAsync()
+    .then(
+      (status) => {
+        if(!status.granted){
+          console.log(status)
+          alert("Location permission denied")
+          return
+        }
+        Location.getCurrentPositionAsync({})
+        .then(location=>{
+          console.log("Received location data")
+          console.log(location)
+          location.coords.name = "Current Location"
+          setUsePosition(false)
+          setCity(location.coords)
+          setIsLoaded(false)
+        })
+
+      }),
+    (error) => {
+        console.log("Error fetching weather data")
+        console.log(error)
+    }
+    return () => { ignore = true ; setUsePosition(false) }
+  }, [usePosition, isLoading, isLoaded]);
   
   return (
     <PaperProvider>
       <Appbar.Header elevated="true">
         <Appbar.Content title="Weather App" />
       </Appbar.Header>
-      <Surface style={styles.main}>
+      <Surface style={styles.main} >
         <ScrollView style={styles.scroll}>
         <Search onClick={(city) =>{setCity(city); setIsLoaded(false)} }></Search>
-        {isLoading && <ActivityIndicator animating={true} />}
+
+        <Button 
+        mode='contained'
+        icon='map-marker'
+        onPress={() => {setUsePosition(true); setIsLoaded(false)}}
+        >
+          use current position
+        </Button>
+
+        {isLoading && 
+          <ActivityIndicator
+            style={styles.loading}
+            animating={true} 
+            size='large'
+          />}
+
         {isLoaded && 
           <>
-            <Text style={styles.h1}>{city.name}</Text>
-            <CurrentWeatherCard weatherData={weatherData["current"]}/> 
+            <CurrentWeatherCard weatherData={weatherData["current"]} city={city}/> 
             <Forecast weatherData={weatherData}/>  
           </>
         }

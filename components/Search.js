@@ -1,6 +1,6 @@
 //searchbar with preview of fetched items
 import { View, Image} from 'react-native'
-import { List, Portal, Searchbar, Text } from 'react-native-paper'
+import { List, Portal, Searchbar, Surface, Text } from 'react-native-paper'
 descriptions = require('./WeatherDescriptions.js') //import the descriptions
 import { useState, useEffect } from 'react'
 import CountryFlag from 'react-native-country-flag';
@@ -61,8 +61,13 @@ function CityList(props){
     })
 
     return (
-            <List.Section>
-                {displayList}
-            </List.Section>
+        displayList.length>0 &&
+        // <Portal>
+            
+                <List.Section>
+                    {displayList}
+                </List.Section>
+            
+        // </Portal>
     )
 }
