@@ -1,0 +1,26 @@
+{
+  "cli": {
+    "version": ">= 7.8.5"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {},
+    "preview2" : {
+      "developmentClient": true
+    },
+    "preview3":{
+      "android":{
+        "buildType" : "apk"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

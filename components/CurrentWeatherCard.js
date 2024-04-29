@@ -11,7 +11,7 @@ export default function CurrentWeatherCard(props) {
 
     return(
         <Card style={styles.current} elevation={3}>
-            <Text style={styles.h1}>{city.name}</Text>
+            <Text variant="displaySmall">{city.name}</Text>
             <Temperature weatherData={weatherData} />
             <WeatherCode weatherData={weatherData}/>
         </Card>

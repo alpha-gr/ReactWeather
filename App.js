@@ -100,7 +100,7 @@ export default function App() {
         .then(location=>{
           console.log("Received location data")
           console.log(location)
-          location.coords.name = "Current Location"
+          location.coords.name = "Current Position"
           setUsePosition(false)
           setCity(location.coords)
           setIsLoaded(false)
@@ -124,7 +124,7 @@ export default function App() {
         <Search onClick={(city) =>{setCity(city); setIsLoaded(false)} }></Search>
 
         <Button 
-        mode='contained'
+        mode= 'contained-tonal'
         icon='map-marker'
         onPress={() => {setUsePosition(true); setIsLoaded(false)}}
         >

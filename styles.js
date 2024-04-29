@@ -6,22 +6,6 @@ export default styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  h1: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  h2: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  h3: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  altText: { 
-    color: 'grey',
-    fontSize: 16,
-  },
   search: {
     width: '100%', 
     alignSelf: 'center',
@@ -36,6 +20,12 @@ export default styles = StyleSheet.create({
 },
 loading:{
     margin: 40,
+},
+hourCard:{
+  flex:1,
+  flexDirection: 'row',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
 },
 });
 

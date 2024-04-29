@@ -21,11 +21,10 @@ export default function WeatherCode(props){
     //console.log(weatherData["time"])
 
     return (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' , padding:10}}>
             <View>
                 <Image source={{ uri: image }} style={{ width: 70, height: 70 }} />
-                <Text>{description}</Text>
+                {/* <Text>{description}</Text> */}
             </View>
-        </View>
+
     )
 }

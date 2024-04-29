@@ -18,11 +18,11 @@ export default function Temperature(props){
         <View> 
             {showMaxMinTemps ? 
             <>
-                <Text style={{ fontSize: 30 }}>{weatherData.temperature2mMax.toFixed(0)}°</Text>
-                <Text style={{ fontSize: 20 }}>{weatherData.temperature2mMin.toFixed(0)}°</Text>
+                <Text variant='bodyLarge'>{Math.round(weatherData.temperature2mMax)}°</Text>
+                <Text variant='bodySmall'>{Math.round(weatherData.temperature2mMin)}°</Text>
             </>
             :
-                <Text style={{ fontSize: 30 }}>{weatherData.temperature2m.toFixed(0)}°</Text>
+                <Text variant='bodyLarge'>{Math.round(weatherData.temperature2m)}°</Text>
             }
         </View>
     )
