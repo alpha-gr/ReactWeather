@@ -44,6 +44,7 @@ import * as Location from 'expo-location';
 
 export default function App() {
   
+
   const [city, setCity] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading  , setIsLoading] = useState(false);
@@ -87,7 +88,6 @@ export default function App() {
     } 
 
     setIsLoaded(false)
-    setIsLoading(true)
 
     Location.requestForegroundPermissionsAsync()
     .then(
@@ -95,8 +95,6 @@ export default function App() {
         if(!status.granted){
           console.log(status)
           alert("Location permission denied")
-          setUsePosition(false)
-          setIsLoaded(false)
           return
         }
         Location.getCurrentPositionAsync({})
@@ -107,7 +105,6 @@ export default function App() {
           setUsePosition(false)
           setCity(location.coords)
           setIsLoaded(false)
-          setIsLoading(false)
         })
 
       }),
@@ -116,7 +113,7 @@ export default function App() {
         console.log(error)
     }
     return () => { ignore = true ; setUsePosition(false) }
-  }, [usePosition]);
+  }, [usePosition, isLoading, isLoaded]);
   
   return (
     <PaperProvider>
