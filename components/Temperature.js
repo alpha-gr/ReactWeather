@@ -15,7 +15,7 @@ export default function Temperature(props){
     }
 
     return (
-        <View> 
+        <View style={{alignSelf:'center'}}> 
             {showMaxMinTemps ? 
             <>
                 <Text variant='bodyLarge'>{Math.round(weatherData.temperature2mMax)}°</Text>

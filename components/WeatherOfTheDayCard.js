@@ -12,7 +12,7 @@ export default function WeatherOfTheDayCard(props) {
     isSelected = props.isSelected
 
     return(
-        <Card elevation={1} style={ isSelected && { backgroundColor: theme.colors.primaryContainer }}>
+        <Card style={ isSelected && { backgroundColor: theme.colors.secondaryContainer }}>
             <DateTime weatherData={weatherData} showDate={true} />
             <Temperature weatherData={weatherData} />
             <WeatherCode weatherData={weatherData} showTime={false} />

@@ -9,7 +9,6 @@ export default function DailyForecastCard(props) {
         <View>
             <Card elevation={3}>
                 <WeatherCode weatherData={weatherData["current"]} showTime={false} />
-                
             </Card>
         </View>
     )

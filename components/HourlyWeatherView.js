@@ -5,13 +5,17 @@ import WeatherOfTheDayCard from './WeatherOfTheDayCard';
 import { ScrollView, View } from 'react-native';
 import WeatherOfTheHourCard from './WeatherOfTheHourCard';
 
+function isToday(date){
+    return date.getDate() == today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear()
+}
+
 export default function HourlyWeatherView(props){
     weatherData = props.weatherData
-    now = new Date().getHours()
+    today = new Date()
 
     items = weatherData.map((data, index) => {
         //do not display forecasts for past hours
-        if (data["time"].getHours() < now){
+        if (isToday(data["time"]) && data["time"].getHours() < today.getHours()){
             return null
         }
         return (

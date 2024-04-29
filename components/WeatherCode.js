@@ -14,6 +14,8 @@ export default function WeatherCode(props){
         return null
     }
 
+    showDescription = props.showDescription == undefined ? false : props.showDescription
+
     let code = weatherData["weatherCode"]
     let time = weatherData["isDay"] == 0 ? "night" : "day"
     let description = descriptions[code][time]["description"]
@@ -22,9 +24,11 @@ export default function WeatherCode(props){
     //console.log(weatherData["time"])
 
     return (
-            <View>
+            <View style={{flexDirection:'column'}}>
                 <Image source={image} style={{ width: 70, height: 70 }} />
-                {/* <Text>{description}</Text> */}
+                { showDescription && 
+                    <Text variant='bodySmall' style={{width: 100}}>{description}</Text>
+                }
             </View>
 
     )
