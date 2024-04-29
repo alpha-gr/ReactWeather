@@ -7,13 +7,17 @@ export default styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   search: {
-    width: '100%', 
-    alignSelf: 'center',
-    marginBottom: 10
+    margin: 10,
+    marginHorizontal: 10,
+  },
+  button:{
+    margin: 10,
+    marginTop: 0,
+    marginHorizontal: 10,
   },
   scroll: {
     width: '100%',
-    padding: 10,
+    padding: 0,
   },
   searchResults: {  
 
@@ -26,6 +30,47 @@ hourCard:{
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'center',
+  paddingHorizontal: 5,
+  borderBottomColor: 'gray',
+  borderBottomWidth: 0.2,
 },
+ pad:{
+  borderBottomLeftRadius:0,
+  borderBottomRightRadius:0,
+ },
+  current: {
+    flex: 1,
+  },
+  city: {
+    textAlign: 'left',
+    margin: 10,
+  },
+  temperatureBig: {
+    alignItems:'flex-center',
+    marginLeft: 10,
+  },
+  temperature: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  weatherCode: {
+    flexDirection: 'column',
+    alignItems : 'center',
+    alignContent: 'center',
+  },
+  description: {
+    textAlign: 'center',
+    margin:5
+  },
+  weatherCodeLarge: {
+    flexDirection: 'column',
+    alignItems : 'flex-end',
+  },
+  descriptionLarge: {
+    textAlign: 'right',
+    marginBottom: 10,
+    marginRight:30,
+  },
+  
 });
 

@@ -1,4 +1,4 @@
-import { Card, Text } from 'react-native-paper'
+import { Card, Surface, Text } from 'react-native-paper'
 import { View } from 'react-native';
 import WeatherCode from './WeatherCode';
 import Temperature from './Temperature';
@@ -10,11 +10,11 @@ export default function CurrentWeatherCard(props) {
     //console.log("CurrentWeatherCard.js: weatherData: ", weatherData)
 
     return(
-        <Card style={styles.current} elevation={3}>
-            <Text variant="displaySmall">{city.name}</Text>
-            <Temperature weatherData={weatherData} />
-            <WeatherCode weatherData={weatherData}/>
-        </Card>
+        <Surface elevation={0} style={styles.current}>
+            <Text style={styles.city} variant="displaySmall">{city.name}</Text>
+            <Temperature weatherData={weatherData} size='large'/>
+            <WeatherCode weatherData={weatherData} showDescription={true} size={'large'}/>
+        </Surface>
     )
 
 }

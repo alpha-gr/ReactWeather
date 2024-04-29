@@ -2,7 +2,7 @@ import React from 'react';
 import WeatherCode from './WeatherCode';
 import { Text, Surface, Card } from 'react-native-paper';
 import WeatherOfTheDayCard from './WeatherOfTheDayCard';
-import { Pressable, ScrollView } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 import styles from '../styles.js'
 
 export default function DailyWeatherBar(props){
@@ -16,10 +16,10 @@ export default function DailyWeatherBar(props){
         )
     })
     return (
-        <Surface>
+        <View style={{padding:0}}>
             <ScrollView horizontal={true}>
             {items}
             </ScrollView>
-        </Surface>
+        </View>
     )
 }

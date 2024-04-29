@@ -13,13 +13,15 @@ export default function WeatherOfTheHourCard(props) {
     let theme = useTheme()
 
     return(
-        <Surface style={[styles.hourCard, {backgroundColor:theme.colors.secondaryContainer}]}>
+        <View style={[styles.hourCard, {backgroundColor:theme.colors.secondaryContainer}]}>
             <DateTime weatherData={weatherData} showTime={true} />
             <View style={{flexDirection:'row'}}>
-                <Temperature weatherData={weatherData} />
-                <WeatherCode weatherData={weatherData} showDescription={true} />
+                <Temperature weatherData={weatherData}/>
+                <View style={{width:80}}>
+                <WeatherCode weatherData={weatherData} showDescription={true} size='small'/>
+                </View>
             </View>
-        </Surface>
+        </View>
     )
 
 }

@@ -133,6 +133,7 @@ export default function App() {
         mode= 'contained-tonal'
         icon='map-marker'
         onPress={() => {setUsePosition(true); setIsLoaded(false)}}
+        style={styles.button}
         >
           use current position
         </Button>

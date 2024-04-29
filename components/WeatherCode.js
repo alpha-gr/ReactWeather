@@ -5,6 +5,7 @@
 import { View, Image} from 'react-native'
 import { Text } from 'react-native-paper'
 import descriptions from './WeatherDescriptions.js'
+import styles from '../styles.js'
 
 export default function WeatherCode(props){
     weatherData = props.weatherData
@@ -15,6 +16,20 @@ export default function WeatherCode(props){
     }
 
     showDescription = props.showDescription == undefined ? false : props.showDescription
+    iconSize = 70
+    size = props.size
+    textVariant = 'bodySmall'
+    textStyle = styles.description
+    style = styles.weatherCode
+    if(size == "large"){
+        iconSize = 100
+        textVariant = 'bodyLarge'
+        textStyle = styles.descriptionLarge
+        style = styles.weatherCodeLarge
+    }
+    if(size=="small"){
+        iconSize = 50
+    }
 
     let code = weatherData["weatherCode"]
     let time = weatherData["isDay"] == 0 ? "night" : "day"
@@ -24,10 +39,10 @@ export default function WeatherCode(props){
     //console.log(weatherData["time"])
 
     return (
-            <View style={{flexDirection:'column'}}>
-                <Image source={image} style={{ width: 70, height: 70 }} />
+            <View style={style}>
+                <Image source={image} style={{ width: iconSize, height: iconSize, alignSelf:'flex-end' }} />
                 { showDescription && 
-                    <Text variant='bodySmall' style={{width: 100}}>{description}</Text>
+                    <Text variant={textVariant} style={textStyle}>{description}</Text>
                 }
             </View>
 
