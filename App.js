@@ -44,12 +44,12 @@ import * as Location from 'expo-location';
 
 export default function App() {
   
-
   const [city, setCity] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading  , setIsLoading] = useState(false);
   const [weatherData, setWeatherData] = useState(null);
   const [usePosition, setUsePosition] = useState(false);
+  const [isLoadingPosition, setIsLoadingPosition] = useState(false);
 
   useEffect(() => {//FETCH WEATHER DATA
     let ignore = false //to prevent race conditions
@@ -88,6 +88,7 @@ export default function App() {
     } 
 
     setIsLoaded(false)
+    setIsLoadingPosition(true)
 
     Location.requestForegroundPermissionsAsync()
     .then(
@@ -95,6 +96,9 @@ export default function App() {
         if(!status.granted){
           console.log(status)
           alert("Location permission denied")
+          setUsePosition(false)
+          setIsLoaded(false)
+          setIsLoadingPosition(false)
           return
         }
         Location.getCurrentPositionAsync({})
@@ -105,6 +109,7 @@ export default function App() {
           setUsePosition(false)
           setCity(location.coords)
           setIsLoaded(false)
+          setIsLoadingPosition(false)
         })
 
       }),
@@ -132,7 +137,7 @@ export default function App() {
           use current position
         </Button>
 
-        {isLoading && 
+        { (isLoading || isLoadingPosition) && 
           <ActivityIndicator
             style={styles.loading}
             animating={true} 

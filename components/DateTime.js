@@ -14,7 +14,7 @@ export default function Temperature(props){
 
     return (
         <View> 
-            {showTime && <Card><Text variant='titleMedium'>{weatherData["time"].toLocaleTimeString(undefined, timeFormatOptions)}</Text></Card>}
+            {showTime && <Text variant='titleMedium'>{weatherData["time"].toLocaleTimeString(undefined, timeFormatOptions)}</Text>}
             {showDate && !isDateToday && <Text>{weatherData["time"].toLocaleDateString(undefined, dateFormatOptions)}</Text>}
             {showDate && isDateToday && <Text>Today</Text>}
         </View>
