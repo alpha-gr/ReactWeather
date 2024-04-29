@@ -9,9 +9,9 @@ export default function Forecast(props){
     const [day, setDay] = useState(0)
 
     weatherData = props.weatherData
+    //console.log(weatherData)
     return(
         <Surface>
-            <Text>weather for the next days:</Text>
             <DailyWeatherBar onPress={(newDay)=>setDay(newDay)} weatherData={weatherData["dailyData"]} day={day} />
             <HourlyWeatherView weatherData={weatherData["hourlyData"][day]}/>
         </Surface>

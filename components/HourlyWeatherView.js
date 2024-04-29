@@ -7,11 +7,11 @@ import WeatherOfTheHourCard from './WeatherOfTheHourCard';
 
 export default function HourlyWeatherView(props){
     weatherData = props.weatherData
-    now = new Date()
+    now = new Date().getHours()
 
     items = weatherData.map((data, index) => {
         //do not display forecasts for past hours
-        if (data["time"] == now){
+        if (data["time"].getHours() < now){
             return null
         }
         return (

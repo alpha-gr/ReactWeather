@@ -51,6 +51,7 @@ export function getWeatherData(city) {
                         precipitationProbability: hourly.variables(1).valuesArray(),
                         precipitation: hourly.variables(2).valuesArray(),
                         weatherCode: hourly.variables(3).valuesArray(),
+                        isDay: hourly.variables(4).valuesArray(),
                     },
                     daily: {
                         time: range(Number(daily.time()), Number(daily.timeEnd()), daily.interval()).map(
@@ -88,6 +89,7 @@ export function getWeatherData(city) {
                             precipitationProbability: weatherData.hourly.precipitationProbability[i * 24 + j],
                             precipitation: weatherData.hourly.precipitation[i * 24 + j],
                             weatherCode: weatherData.hourly.weatherCode[i * 24 + j],
+                            isDay: weatherData.hourly.isDay[i * 24 + j],
                         });
                     }
                     hourlyDataArray.push(hourlyData);

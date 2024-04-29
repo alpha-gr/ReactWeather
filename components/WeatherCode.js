@@ -18,11 +18,12 @@ export default function WeatherCode(props){
     let time = weatherData["isDay"] == 0 ? "night" : "day"
     let description = descriptions[code][time]["description"]
     let image = descriptions[code][time]["image"]
+    let uri = '../assets/weatherIcons/'+code+time+'.png'
     //console.log(weatherData["time"])
 
     return (
             <View>
-                <Image source={{ uri: image }} style={{ width: 70, height: 70 }} />
+                <Image source={image} style={{ width: 70, height: 70 }} />
                 {/* <Text>{description}</Text> */}
             </View>
 

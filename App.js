@@ -87,6 +87,7 @@ export default function App() {
     } 
 
     setIsLoaded(false)
+    setIsLoading(true)
 
     Location.requestForegroundPermissionsAsync()
     .then(
@@ -94,6 +95,8 @@ export default function App() {
         if(!status.granted){
           console.log(status)
           alert("Location permission denied")
+          setUsePosition(false)
+          setIsLoaded(false)
           return
         }
         Location.getCurrentPositionAsync({})
@@ -104,6 +107,7 @@ export default function App() {
           setUsePosition(false)
           setCity(location.coords)
           setIsLoaded(false)
+          setIsLoading(false)
         })
 
       }),
@@ -112,7 +116,7 @@ export default function App() {
         console.log(error)
     }
     return () => { ignore = true ; setUsePosition(false) }
-  }, [usePosition, isLoading, isLoaded]);
+  }, [usePosition]);
   
   return (
     <PaperProvider>
