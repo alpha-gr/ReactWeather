@@ -63,11 +63,11 @@ function CityList(props){
     return (
         displayList.length>0 &&
         // <Portal>
-            
+            <View style={styles.cityList}>
                 <List.Section>
                     {displayList}
                 </List.Section>
-            
+            </View>
         // </Portal>
     )
 }

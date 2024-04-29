@@ -71,6 +71,8 @@ hourCard:{
     marginBottom: 10,
     marginRight:30,
   },
-  
+  cityList: {
+    padding: 10,
+  },
 });
 
