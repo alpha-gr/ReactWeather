@@ -11,7 +11,7 @@ export default function Search(props){
     const [ city, setCity ] = useState('')
     return (
         <>
-            <Searchbar style={styles.search} placeholder='enter city or postal code' 
+            <Searchbar style={styles.search} placeholder='enter city name' 
                 value={city}
                 onChangeText={ (newCity) => {setCity(newCity)} }
             />
@@ -54,7 +54,7 @@ function CityList(props){
         return <List.Item
             key={item.id}
             title={item.name}
-            description={item.country + ', ' + item.admin1}
+            description={(item.country!=undefined?item.country:'') + (item.admin1!=undefined ? ', '+item.admin1 : '')}
             left={props => <CountryFlag isoCode={item.country_code} size={20}/>}
             onPress={() => {props.onClick(item); setCityList([])}}
         />
