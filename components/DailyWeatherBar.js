@@ -17,7 +17,7 @@ export default function DailyWeatherBar(props){
     })
     return (
         <View style={{padding:0}}>
-            <ScrollView horizontal={true}>
+            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             {items}
             </ScrollView>
         </View>
