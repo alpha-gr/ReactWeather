@@ -61,7 +61,6 @@ export default function App() {
     setIsLoaded(false)
     setIsLoading(true)
 
-    console.log(city)
     getWeatherData(city)
     .then(data => {
         if(!ignore){
@@ -82,7 +81,6 @@ export default function App() {
 
   useEffect(() => {//FETCH GEOLOCATION DATA
     let ignore = false //to prevent race conditions
-    console.log("usePosition: "+ usePosition)
     if(usePosition==false || isLoading || isLoaded){
         return
     } 
@@ -104,7 +102,7 @@ export default function App() {
         Location.getCurrentPositionAsync({})
         .then(location=>{
           console.log("Received location data")
-          console.log(location)
+          //console.log(location)
           location.coords.name = "Current Position"
           setUsePosition(false)
           setCity(location.coords)
