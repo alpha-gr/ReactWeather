@@ -26,17 +26,18 @@ loading:{
     margin: 40,
 },
 hourCard:{
-  flex:1,
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'center',
   paddingHorizontal: 5,
   borderBottomColor: 'gray',
   borderBottomWidth: 0.2,
+  height: 80,
 },
  pad:{
   borderBottomLeftRadius:0,
   borderBottomRightRadius:0,
+  width: 80,
  },
   current: {
     flex: 1,
@@ -57,6 +58,7 @@ hourCard:{
     flexDirection: 'column',
     alignItems : 'center',
     alignContent: 'center',
+    alignSelf: 'center', 
   },
   description: {
     textAlign: 'center',
