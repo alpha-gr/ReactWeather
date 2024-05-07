@@ -5,7 +5,9 @@ const forecast_days = 7;
 range = (start, stop, step) =>
 	Array.from({ length: (stop - start) / step }, (_, i) => start + i * step);
 
-export function getWeatherData(city) {
+export function getWeatherData(city, calendar) {
+
+    timezone = calendar["timeZone"];
 
     return new Promise((resolve, reject) => {
         const params = {
@@ -14,7 +16,7 @@ export function getWeatherData(city) {
 			"current": ["temperature_2m", "is_day", "weather_code"],
             "hourly": ["temperature_2m", "precipitation_probability", "precipitation", "weather_code", "is_day"],
 	        "daily": ["weather_code", "temperature_2m_max", "temperature_2m_min"],
-			"timezone": "auto",
+			"timezone": timezone,
 			"forecast_days": forecast_days
 		};
         const url = "https://api.open-meteo.com/v1/forecast";

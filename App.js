@@ -14,54 +14,37 @@ import { getWeatherData } from './components/weather.js';
 import Forecast from './components/Forecast.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
+import { useCalendars } from 'expo-localization';
 
-//weatherData = null
-
-// _storeData = async () => {
-//   try {
-//     await AsyncStorage.setItem(
-//       'CITY',
-//       'Bologna',
-//     );
-//   } catch (error) {
-//     // Error saving data
-//     console.log(error)
-//   }
-// };
-
-// _retrieveData = async () => {
-//   try {
-//     const value = await AsyncStorage.getItem('CITY');
-//     if (value !== null) {
-//       // We have data!!
-//       console.log('cached data: '+ value);
-//     }
-//   } catch (error) {
-//     // Error retrieving data
-//     console.log(error)
-//   }
-// };
+//TODO: remove spinner if error occurs
+//TODO: display errors to user
 
 export default function App() {
   
+  const calendars = useCalendars();
   const [city, setCity] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading  , setIsLoading] = useState(false);
   const [weatherData, setWeatherData] = useState(null);
   const [usePosition, setUsePosition] = useState(false);
   const [isLoadingPosition, setIsLoadingPosition] = useState(false);
+  const [useLocationName, setUseLocationName] = useState(false);
+  const [isLoadingLocationName, setIsLoadingLocationName] = useState(false);
+  const [coords, setCoords] = useState(null);
+
 
   useEffect(() => {//FETCH WEATHER DATA
     let ignore = false //to prevent race conditions
 
-    if(city==null || isLoading || isLoaded || usePosition){
+    if(city==null || isLoading || isLoaded || usePosition || isLoadingPosition || useLocationName || isLoadingLocationName){
         return
     } 
+    console.log("triggered weather fetch")
 
     setIsLoaded(false)
     setIsLoading(true)
 
-    getWeatherData(city)
+    getWeatherData(city, calendars[0])
     .then(data => {
         if(!ignore){
           console.log("App.js: Weather data received")
@@ -72,18 +55,20 @@ export default function App() {
         }
     },
     (error) => {
-        console.log("Error fetching weather data")
+        console.log("Error in weather fetching hook")
         console.log(error)
     }
     )
     return () => { ignore = true }
-  }, [city]);
+  }, [city, isLoadingLocationName]);
 
   useEffect(() => {//FETCH GEOLOCATION DATA
     let ignore = false //to prevent race conditions
-    if(usePosition==false || isLoading || isLoaded){
+    if(usePosition==false || isLoading || isLoaded || isLoadingPosition || useLocationName || isLoadingLocationName){ 
         return
     } 
+
+    console.log("triggered location fetch")
 
     setIsLoaded(false)
     setIsLoadingPosition(true)
@@ -103,20 +88,65 @@ export default function App() {
         .then(location=>{
           console.log("Received location data")
           //console.log(location)
-          location.coords.name = "Current Position"
+          //location.coords.name = "Current Position"
           setUsePosition(false)
-          setCity(location.coords)
+          setCoords(location.coords)
           setIsLoaded(false)
           setIsLoadingPosition(false)
+          setIsLoadingLocationName(false)
+          setUseLocationName(true)
         })
 
-      }),
+      },(error) => {
+        console.log("Error getting location data")
+        console.log(error)
+      }
+    ),
     (error) => {
-        console.log("Error fetching weather data")
+        console.log("Error in location hook")
         console.log(error)
     }
     return () => { ignore = true ; setUsePosition(false) }
   }, [usePosition, isLoading, isLoaded]);
+
+  useEffect(() => {//FETCH INVERSE GEOLOCATION DATA
+    let ignore = false //to prevent race conditions
+    if(useLocationName==false || isLoading || isLoaded || isLoadingPosition || usePosition || isLoadingLocationName){
+        return
+    } 
+
+    console.log("triggered inverse geocoding fetch") 
+
+    setIsLoaded(false)
+    setIsLoadingLocationName(true)
+    
+    fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${coords.latitude}&longitude=${coords.longitude}&localityLanguage=en`)
+    .then(response => response.json())
+    .then(data => {
+        console.log("Received inverse geocoding data")
+        //console.log(data)
+        let city = {}
+        city.name=data["city"]
+        city.latitude=data["latitude"]
+        city.longitude=data["longitude"]
+        city.admin1=data["principalSubdivision"]
+        city.isCurrentLocation=true
+        setIsLoaded(false)
+        setIsLoadingLocationName(false)
+        setUseLocationName(false)
+        setCity(city)
+    },(error) => {
+      console.log("Error getting inverse geocoding data")
+      console.log(error)
+    }
+  ),
+    (error) => {
+        console.log("Error in inverse geocoding hook")
+        console.log(error)
+    }
+    return () => { ignore = true ; setUseLocationName(false) }
+  }, [useLocationName, isLoading, isLoaded]);
+
   
   return (
     <PaperProvider>
@@ -136,7 +166,7 @@ export default function App() {
           use current position
         </Button>
 
-        { (isLoading || isLoadingPosition) && 
+        { (isLoading || isLoadingPosition || isLoadingLocationName) && 
           <ActivityIndicator
             style={styles.loading}
             animating={true} 
