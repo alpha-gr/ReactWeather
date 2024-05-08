@@ -18,10 +18,14 @@ import { useCalendars } from 'expo-localization';
 
 //TODO: remove spinner if error occurs
 //TODO: display errors to user
+//TODO: clean up the state variables ( use a reducer ?)
+//TODO: too many rerenders, optimize
 
 export default function App() {
+
+  console.log("App.js: reendering")
   
-  const calendars = useCalendars();
+  const calendar = useCalendars()[0];
   const [city, setCity] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading  , setIsLoading] = useState(false);
@@ -40,11 +44,11 @@ export default function App() {
         return
     } 
     console.log("triggered weather fetch")
-
+    
     setIsLoaded(false)
     setIsLoading(true)
 
-    getWeatherData(city, calendars[0])
+    getWeatherData(city, calendar)
     .then(data => {
         if(!ignore){
           console.log("App.js: Weather data received")

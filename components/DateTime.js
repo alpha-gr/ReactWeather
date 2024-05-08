@@ -4,7 +4,7 @@ import { Card, Text } from 'react-native-paper'
 timeFormatOptions= {hour: '2-digit', minute: '2-digit'}//for time formatting
 dateFormatOptions = {weekday: 'short'}//for date formatting
 
-export default function Temperature(props){
+export default function DateTime(props){
     weatherData = props.weatherData
 
     showTime = props.showTime == undefined ? false : props.showTime 
