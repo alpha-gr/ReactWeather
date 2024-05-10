@@ -14,7 +14,7 @@ export default function WeatherOfTheHourCard(props) {
 
     return(
         <View style={[styles.hourCard, {backgroundColor:theme.colors.secondaryContainer}]}>
-            <DateTime weatherData={weatherData} showTime={true} />
+            <DateTime weatherData={weatherData} showTime={true}/>
             <View style={{flexDirection:'row'}}>
                 <Temperature weatherData={weatherData}/>
                 <View style={{width:80}}>

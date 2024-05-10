@@ -23,7 +23,7 @@ import { useCalendars } from 'expo-localization';
 
 export default function App() {
 
-  console.log("App.js: reendering")
+  console.log("App.js: rerendering")
   
   const calendar = useCalendars()[0];
   const [city, setCity] = useState(null);
@@ -36,7 +36,7 @@ export default function App() {
   const [isLoadingLocationName, setIsLoadingLocationName] = useState(false);
   const [coords, setCoords] = useState(null);
 
-
+  
   useEffect(() => {//FETCH WEATHER DATA
     let ignore = false //to prevent race conditions
 

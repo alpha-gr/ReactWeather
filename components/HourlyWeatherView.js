@@ -5,21 +5,20 @@ import WeatherOfTheDayCard from './WeatherOfTheDayCard';
 import { ScrollView, View } from 'react-native';
 import WeatherOfTheHourCard from './WeatherOfTheHourCard';
 
-function isToday(date){
-    return date.getDate() == today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear()
-}
+import { isToday } from './scripts/timeHelper'
 
 export default function HourlyWeatherView(props){
     weatherData = props.weatherData
-    today = new Date()
+
+    now = new Date()
 
     items = weatherData.map((data, index) => {
-        //do not display forecasts for past hours
-        if (isToday(data["time"]) && data["time"].getHours() < today.getHours()){
+        //do not display forecasts for past hours (accounts for timezone difference)
+        if (isToday(data["time"]) && data["time"].getUTCHours() < now.getUTCHours()){
             return null
         }
         return (
-            <WeatherOfTheHourCard key={index} weatherData={data} />
+            <WeatherOfTheHourCard key={index} weatherData={data}/>
         )
     })
 

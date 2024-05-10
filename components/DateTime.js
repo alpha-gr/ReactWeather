@@ -1,16 +1,23 @@
 import { View} from 'react-native'
 import { Card, Text } from 'react-native-paper'
 
-timeFormatOptions= {hour: '2-digit', minute: '2-digit'}//for time formatting
-dateFormatOptions = {weekday: 'short'}//for date formatting
+import { isToday } from './scripts/timeHelper'
+
 
 export default function DateTime(props){
+
     weatherData = props.weatherData
+    metadata = weatherData["metadata"]
+    
+    timeFormatOptions= {hour: '2-digit', minute: '2-digit', timeZone: metadata["timezone"]}
+    dateFormatOptions = {weekday: 'short', timeZone: metadata["timezone"]}
 
     showTime = props.showTime == undefined ? false : props.showTime 
     showDate = props.showDate == undefined ? false : props.showDate
 
-    isDateToday = weatherData["time"].getDate() == new Date().getDate()
+    //isDateToday = weatherData["time"].getDate() == new Date().getDate() //TODO fix for different timezones
+
+    isDateToday = isToday(weatherData["time"])
 
     return (
         <View style={{padding:10, alignSelf:'center'}}> 

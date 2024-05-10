@@ -16,7 +16,7 @@ export function getWeatherData(city, calendar) {
 			"current": ["temperature_2m", "is_day", "weather_code"],
             "hourly": ["temperature_2m", "precipitation_probability", "precipitation", "weather_code", "is_day"],
 	        "daily": ["weather_code", "temperature_2m_max", "temperature_2m_min"],
-			"timezone": timezone,
+			"timezone": "auto",
 			"forecast_days": forecast_days
 		};
         const url = "https://api.open-meteo.com/v1/forecast";
@@ -63,8 +63,11 @@ export function getWeatherData(city, calendar) {
                         temperature2mMax: daily.variables(1).valuesArray(),
                         temperature2mMin: daily.variables(2).valuesArray(),
                     },
-                    // dailyDataArray: [],
-                    // hourlyDataArray: [],
+                    metadata:{
+                        utcOffsetSeconds: utcOffsetSeconds,
+                        timezone: timezone,
+                        timezoneAbbreviation: timezoneAbbreviation,
+                    }
                 };
                 // `weatherData` now contains a simple structure with arrays for datetime and weather data
 
@@ -76,6 +79,7 @@ export function getWeatherData(city, calendar) {
                         weatherCode: weatherData.daily.weatherCode[i],
                         temperature2mMax: weatherData.daily.temperature2mMax[i],
                         temperature2mMin: weatherData.daily.temperature2mMin[i],
+                        metadata: weatherData.metadata,
                     });
                 }
                 weatherData.dailyData = dailyDataArray;
@@ -92,6 +96,7 @@ export function getWeatherData(city, calendar) {
                             precipitation: weatherData.hourly.precipitation[i * 24 + j],
                             weatherCode: weatherData.hourly.weatherCode[i * 24 + j],
                             isDay: weatherData.hourly.isDay[i * 24 + j],
+                            metadata: weatherData.metadata,
                         });
                     }
                     hourlyDataArray.push(hourlyData);
@@ -99,8 +104,8 @@ export function getWeatherData(city, calendar) {
                 weatherData.hourlyData = hourlyDataArray;
 
 				//log the weather data
-                //console.log("weather.js: weather data fetched")
-				//console.log(weatherData);
+                console.log("weather.js: weather data fetched")
+				console.log(weatherData);
 
                 resolve(weatherData);
             })
