@@ -104,8 +104,8 @@ export function getWeatherData(city, calendar) {
                 weatherData.hourlyData = hourlyDataArray;
 
 				//log the weather data
-                console.log("weather.js: weather data fetched")
-				console.log(weatherData);
+                //console.log("weather.js: weather data fetched")
+				//console.log(weatherData);
 
                 resolve(weatherData);
             })

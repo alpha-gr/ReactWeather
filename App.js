@@ -25,6 +25,7 @@ export default function App() {
 
   console.log("App.js: rerendering")
   
+  const [key, setKey] = useState(0);
   const calendar = useCalendars()[0];
   const [city, setCity] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -159,12 +160,12 @@ export default function App() {
       </Appbar.Header>
       <Surface style={styles.main} >
         <ScrollView style={styles.scroll}>
-        <Search onClick={(city) =>{setCity(city); setIsLoaded(false)} }></Search>
+        <Search onClick={(city) =>{setCity(city); setIsLoaded(false)}} key={key}></Search>
 
         <Button 
         mode= 'contained-tonal'
         icon='map-marker'
-        onPress={() => {setUsePosition(true); setIsLoaded(false)}}
+        onPress={() => {setUsePosition(true); setIsLoaded(false); setKey(key+1)}}
         style={styles.button}
         >
           use current position

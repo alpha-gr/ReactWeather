@@ -9,13 +9,18 @@ const max_fetch_results = 5
 
 export default function Search(props){
     const [ city, setCity ] = useState('')
+    const [ placeholder, setPlaceholder ] = useState('enter city name')
     return (
         <>
-            <Searchbar style={styles.search} placeholder='enter city name' 
+            <Searchbar style={styles.search} placeholder={placeholder}
                 value={city}
-                onChangeText={ (newCity) => {setCity(newCity)} }
+                onChangeText={ (newCity) => {setCity(newCity)} 
+                }
             />
-            <CityList city={city} {...props}/>
+            <CityList 
+                city={city} 
+                emptyCity={(cityName) => {setCity(''); setPlaceholder(cityName)}}
+                {...props}/>
             
         </>
     )
@@ -26,6 +31,7 @@ function CityList(props){
     city= props.city
     const [cityList, setCityList] = useState([])
     displayList = []
+    emptyCity = props.emptyCity
 
     useEffect(() => {
         let ignore = false //to prevent race conditions
@@ -56,7 +62,7 @@ function CityList(props){
             title={item.name}
             description={(item.country!=undefined?item.country:'') + (item.admin1!=undefined ? ', '+item.admin1 : '')}
             left={props => <CountryFlag isoCode={item.country_code} size={20}/>}
-            onPress={() => {props.onClick(item); setCityList([])}}
+            onPress={() => {props.onClick(item);  emptyCity(item.name) ; setCityList([]);}}
         />
     })
 
