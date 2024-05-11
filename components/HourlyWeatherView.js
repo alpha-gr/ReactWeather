@@ -6,6 +6,7 @@ import { ScrollView, View } from 'react-native';
 import WeatherOfTheHourCard from './WeatherOfTheHourCard';
 
 import { isToday } from './scripts/timeHelper'
+import { compareHoursTimezone } from './scripts/timeHelper';
 
 export default function HourlyWeatherView(props){
     weatherData = props.weatherData
@@ -14,7 +15,8 @@ export default function HourlyWeatherView(props){
 
     items = weatherData.map((data, index) => {
         //do not display forecasts for past hours (accounts for timezone difference)
-        if (isToday(data["time"]) && data["time"].getUTCHours() < now.getUTCHours()){
+        
+        if (isToday(data["time"], data["time"]["timezone"]) && compareHoursTimezone(data["time"], now) < 0) {
             return null
         }
         return (
