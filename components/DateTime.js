@@ -17,7 +17,7 @@ export default function DateTime(props){
 
     //isDateToday = weatherData["time"].getDate() == new Date().getDate() //TODO fix for different timezones
 
-    isDateToday = isToday(weatherData["time"])
+    isDateToday = isToday(weatherData["time"], weatherData["metadata"])
 
     return (
         <View style={{padding:10, alignSelf:'center'}}> 

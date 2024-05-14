@@ -16,7 +16,7 @@ export default function HourlyWeatherView(props){
     items = weatherData.map((data, index) => {
         //do not display forecasts for past hours (accounts for timezone difference)
         
-        if (isToday(data["time"], data["time"]["timezone"]) && compareHoursTimezone(data["time"], now) < 0) {
+        if (isToday(data["time"], data["metadata"]) && compareHoursTimezone(data["time"], now) < 0) {
             return null
         }
         return (
