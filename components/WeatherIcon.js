@@ -8,12 +8,19 @@
 import React from "react";
 import { Image } from "react-native";
 import PropTypes from "prop-types";
-import { static_icons, animated_icons } from "../assets/icons";
+import { animated_icons } from "./WMOanimated_icons";
+import { static_icons } from "./WMOstatic_icons";
+import Icon from '../assets/icons/animated_icons/day.svg'
 
-const WeatherIcon = ({ weatherCode, isDay, animated }) => {
-  const icon = animated
-    ? animated_icons[weatherCode][isDay ? "day" : "night"]
-    : static_icons[weatherCode][isDay ? "day" : "night"];
-  return <Image source={icon} style={{ width: 100, height: 100 }} />;
-};
+export default function WeatherIcon(props){
+  const code = props.code;
+  const isDay = props.isDay;
+  const size = props.size;
+  const style = props.style;
+  const iconSize = size === "large" ? 100 : 70;
+  const icons = style === "static" ? static_icons : animated_icons;
+  const icon = isDay ? icons.find(icon => icon.code === code).day : icons.find(icon => icon.code === code).night;
 
+  //return <Image source={icon} style={{ width: iconSize, height: iconSize }} />;
+  return <Icon width={iconSize} height={iconSize} />;
+}
