@@ -16,6 +16,7 @@ import Forecast from './components/Forecast.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 import { useCalendars } from 'expo-localization';
+import fetchGeoLocation from './components/geoLocation.js';
 
 //TODO: remove spinner if error occurs
 //TODO: display errors to user
@@ -31,28 +32,22 @@ export default function App() {
 
   console.log("App.js: rerendering")
 
-  const [key, setKey] = useState(0);
   const calendar = useCalendars()[0];
+  const [key, setKey] = useState(0);
   const [city, setCity] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [weatherData, setWeatherData] = useState(null);
-  const [usePosition, setUsePosition] = useState(false);
-  const [isLoadingPosition, setIsLoadingPosition] = useState(false);
-  const [useLocationName, setUseLocationName] = useState(false);
-  const [isLoadingLocationName, setIsLoadingLocationName] = useState(false);
-  const [coords, setCoords] = useState(null);
 
 
   useEffect(() => {//FETCH WEATHER DATA
     let ignore = false //to prevent race conditions
 
-    if (city == null || isLoading || isLoaded || usePosition || isLoadingPosition || useLocationName || isLoadingLocationName) {
+    if (city == null) {
       return
     }
     console.log("triggered weather fetch")
 
-    setIsLoaded(false)
     setIsLoading(true)
 
     getWeatherData(city, calendar)
@@ -61,8 +56,8 @@ export default function App() {
           console.log("App.js: Weather data received")
           setWeatherData(data)
           //console.log(weatherData)
-          setIsLoaded(true)
           setIsLoading(false)
+          setIsLoaded(true)
         }
       },
         (error) => {
@@ -71,93 +66,19 @@ export default function App() {
         }
       )
     return () => { ignore = true }
-  }, [city, isLoadingLocationName]);
+  }, [city]);
 
-  useEffect(() => {//FETCH GEOLOCATION DATA
-    let ignore = false //to prevent race conditions
-    if (usePosition == false || isLoading || isLoaded || isLoadingPosition || useLocationName || isLoadingLocationName) {
-      return
-    }
+  const geoLocationHandlePress = async () => {
+    console.log("geoLocationHandlePress called");
+    setIsLoading(true);
 
-    console.log("triggered location fetch")
+    fetchGeoLocation()
+      .then((city) => {
+        console.log("App.js: Received city data from geolocation")
+        setCity(city);
+      })
 
-    setIsLoaded(false)
-    setIsLoadingPosition(true)
-
-    Location.requestForegroundPermissionsAsync()
-      .then(
-        (status) => {
-          if (!status.granted) {
-            console.log(status)
-            alert("Location permission denied")
-            setUsePosition(false)
-            setIsLoaded(false)
-            setIsLoadingPosition(false)
-            return
-          }
-          Location.getCurrentPositionAsync({})
-            .then(location => {
-              console.log("Received location data")
-              //console.log(location)
-              //location.coords.name = "Current Position"
-              setUsePosition(false)
-              setCoords(location.coords)
-              setIsLoaded(false)
-              setIsLoadingPosition(false)
-              setIsLoadingLocationName(false)
-              setUseLocationName(true)
-            })
-
-        }, (error) => {
-          console.log("Error getting location data")
-          console.log(error)
-        }
-      ),
-      (error) => {
-        console.log("Error in location hook")
-        console.log(error)
-      }
-    return () => { ignore = true; setUsePosition(false) }
-  }, [usePosition, isLoading, isLoaded]);
-
-  useEffect(() => {//FETCH INVERSE GEOLOCATION DATA
-    let ignore = false //to prevent race conditions
-    if (useLocationName == false || isLoading || isLoaded || isLoadingPosition || usePosition || isLoadingLocationName) {
-      return
-    }
-
-    console.log("triggered inverse geocoding fetch")
-
-    setIsLoaded(false)
-    setIsLoadingLocationName(true)
-
-    fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${coords.latitude}&longitude=${coords.longitude}&localityLanguage=en`)
-      .then(response => response.json())
-      .then(data => {
-        console.log("Received inverse geocoding data")
-        //console.log(data)
-        let city = {}
-        city.name = data["city"]
-        city.latitude = data["latitude"]
-        city.longitude = data["longitude"]
-        city.admin1 = data["principalSubdivision"]
-        city.isCurrentLocation = true
-        setIsLoaded(false)
-        setIsLoadingLocationName(false)
-        setUseLocationName(false)
-        setCity(city)
-      }, (error) => {
-        console.log("Error getting inverse geocoding data")
-        console.log(error)
-      }
-      ),
-      (error) => {
-        console.log("Error in inverse geocoding hook")
-        console.log(error)
-      }
-    return () => { ignore = true; setUseLocationName(false) }
-  }, [useLocationName, isLoading, isLoaded]);
-
+  }
 
 
 
@@ -168,25 +89,25 @@ export default function App() {
       </Appbar.Header>
       <Surface style={styles.main} >
         <ScrollView style={styles.scroll}>
-          <Search onClick={(city) => { setCity(city); setIsLoaded(false) }} key={key}></Search>
+          <Search onClick={(city) => { setCity(city) }} key={key}></Search>
 
           <Button
             mode='contained-tonal'
             icon='map-marker'
-            onPress={() => { setUsePosition(true); setIsLoaded(false); setKey(key + 1) }}
+            onPress={() => { geoLocationHandlePress(); setKey(key + 1) }}
             style={styles.button}
           >
             use current position
           </Button>
 
-          {(isLoading || isLoadingPosition || isLoadingLocationName) &&
+          {(isLoading) &&
             <ActivityIndicator
               style={styles.loading}
               animating={true}
               size='large'
             />}
 
-          {isLoaded &&
+          {isLoaded && !isLoading &&
             <>
               <CurrentWeatherCard weatherData={weatherData["current"]} city={city} />
               <Forecast weatherData={weatherData} />
