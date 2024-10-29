@@ -69,6 +69,9 @@ export default function App() {
   }, [city]);
 
   const geoLocationHandlePress = async () => {
+    if(isLoading){
+      return
+    }
     console.log("geoLocationHandlePress called");
     setIsLoading(true);
 
