@@ -1,117 +1,94 @@
 import { fetchWeatherApi } from 'openmeteo';
+
 const forecast_days = 7;
 
 // Helper function to form time ranges
-range = (start, stop, step) =>
-	Array.from({ length: (stop - start) / step }, (_, i) => start + i * step);
+const range = (start, stop, step) => 
+    Array.from({ length: (stop - start) / step }, (_, i) => start + i * step);
 
-export function getWeatherData(city, calendar) {
+export async function getWeatherData(city, calendar) {
+    const timezone = calendar["timeZone"];
+    const params = {
+        latitude: city.latitude,
+        longitude: city.longitude,
+        current: ["temperature_2m", "is_day", "weather_code"],
+        hourly: ["temperature_2m", "precipitation_probability", "precipitation", "weather_code", "is_day"],
+        daily: ["weather_code", "temperature_2m_max", "temperature_2m_min"],
+        timezone: "auto",
+        forecast_days
+    };
+    const url = "https://api.open-meteo.com/v1/forecast";
 
-    timezone = calendar["timeZone"];
+    try {
+        const responses = await fetchWeatherApi(url, params);
+        const response = responses[0];
 
-    return new Promise((resolve, reject) => {
-        const params = {
-			"latitude": city.latitude,
-			"longitude": city.longitude,
-			"current": ["temperature_2m", "is_day", "weather_code"],
-            "hourly": ["temperature_2m", "precipitation_probability", "precipitation", "weather_code", "is_day"],
-	        "daily": ["weather_code", "temperature_2m_max", "temperature_2m_min"],
-			"timezone": "auto",
-			"forecast_days": forecast_days
-		};
-        const url = "https://api.open-meteo.com/v1/forecast";
-        let data = fetchWeatherApi(url, params)
+        const weatherData = {
+            current: {
+                time: new Date(Number(response.current().time()) * 1000),
+                temperature2m: response.current().variables(0).value(),
+                isDay: response.current().variables(1).value(),
+                weatherCode: response.current().variables(2).value(),
+            },
+            hourly: {
+                time: range(Number(response.hourly().time()), Number(response.hourly().timeEnd()), response.hourly().interval()).map(
+                    (t) => new Date(t * 1000)
+                ),
+                temperature2m: response.hourly().variables(0).valuesArray(),
+                precipitationProbability: response.hourly().variables(1).valuesArray(),
+                precipitation: response.hourly().variables(2).valuesArray(),
+                weatherCode: response.hourly().variables(3).valuesArray(),
+                isDay: response.hourly().variables(4).valuesArray(),
+            },
+            daily: {
+                time: range(Number(response.daily().time()), Number(response.daily().timeEnd()), response.daily().interval()).map(
+                    (t) => new Date(t * 1000)
+                ),
+                weatherCode: response.daily().variables(0).valuesArray(),
+                temperature2mMax: response.daily().variables(1).valuesArray(),
+                temperature2mMin: response.daily().variables(2).valuesArray(),
+            },
+            metadata: {
+                utcOffsetSeconds: response.utcOffsetSeconds(),
+                timezone: response.timezone(),
+                timezoneAbbreviation: response.timezoneAbbreviation(),
+                latitude: response.latitude(),
+                longitude: response.longitude()
+            }
+        };
 
-    	data.then(responses => {
-                // Process first location. Add a for-loop for multiple locations or weather models
-                const response = responses[0];
+        // Helper function to format daily and hourly data
+        const formatDailyData = () => Array.from({ length: forecast_days }, (_, i) => ({
+            time: weatherData.daily.time[i],
+            weatherCode: weatherData.daily.weatherCode[i],
+            temperature2mMax: weatherData.daily.temperature2mMax[i],
+            temperature2mMin: weatherData.daily.temperature2mMin[i],
+            metadata: weatherData.metadata
+        }));
 
-                // Attributes for timezone and location
-                const utcOffsetSeconds = response.utcOffsetSeconds();
-                const timezone = response.timezone();
-                const timezoneAbbreviation = response.timezoneAbbreviation();
-                const latitude = response.latitude();
-                const longitude = response.longitude();
+        const formatHourlyData = () => Array.from({ length: forecast_days }, (_, i) => 
+            Array.from({ length: 24 }, (_, j) => ({
+                time: weatherData.hourly.time[i * 24 + j],
+                temperature2m: weatherData.hourly.temperature2m[i * 24 + j],
+                precipitationProbability: weatherData.hourly.precipitationProbability[i * 24 + j],
+                precipitation: weatherData.hourly.precipitation[i * 24 + j],
+                weatherCode: weatherData.hourly.weatherCode[i * 24 + j],
+                isDay: weatherData.hourly.isDay[i * 24 + j],
+                metadata: weatherData.metadata
+            }))
+        );
 
-                const current = response.current();
-                const hourly = response.hourly();
-                const daily = response.daily();
+        // Assemble daily and hourly data into arrays
+        weatherData.dailyData = formatDailyData();
+        weatherData.hourlyData = formatHourlyData();
 
-                // Note: The order of weather variables in the URL query and the indices below need to match!
-                const weatherData = {
-                    current: {
-                        time: new Date((Number(current.time())) * 1000),
-                        temperature2m: current.variables(0).value(),
-                        isDay: current.variables(1).value(),
-                        weatherCode: current.variables(2).value(),
-                    },
-                    hourly: {
-                        time: range(Number(hourly.time()), Number(hourly.timeEnd()), hourly.interval()).map(
-                            (t) => new Date((t) * 1000)
-                        ),
-                        temperature2m: hourly.variables(0).valuesArray(),
-                        precipitationProbability: hourly.variables(1).valuesArray(),
-                        precipitation: hourly.variables(2).valuesArray(),
-                        weatherCode: hourly.variables(3).valuesArray(),
-                        isDay: hourly.variables(4).valuesArray(),
-                    },
-                    daily: {
-                        time: range(Number(daily.time()), Number(daily.timeEnd()), daily.interval()).map(
-                            (t) => new Date((t) * 1000)
-                        ),
-                        weatherCode: daily.variables(0).valuesArray(),
-                        temperature2mMax: daily.variables(1).valuesArray(),
-                        temperature2mMin: daily.variables(2).valuesArray(),
-                    },
-                    metadata:{
-                        utcOffsetSeconds: utcOffsetSeconds,
-                        timezone: timezone,
-                        timezoneAbbreviation: timezoneAbbreviation,
-                    }
-                };
-                // `weatherData` now contains a simple structure with arrays for datetime and weather data
+        // Logging for debug purposes
+        // console.log("weather.js: weather data fetched", weatherData);
 
-                // put the daily weather data in an array
-                let dailyDataArray = [];
-                for (let i = 0; i < forecast_days; i++) {
-                    dailyDataArray.push({
-                        time: weatherData.daily.time[i],
-                        weatherCode: weatherData.daily.weatherCode[i],
-                        temperature2mMax: weatherData.daily.temperature2mMax[i],
-                        temperature2mMin: weatherData.daily.temperature2mMin[i],
-                        metadata: weatherData.metadata,
-                    });
-                }
-                weatherData.dailyData = dailyDataArray;
+        return weatherData;
 
-                // put the hourly weather data in an array, each day contains the hourly data for that day
-                 let hourlyDataArray = [];
-                for (let i = 0; i < forecast_days; i++) {
-                    let hourlyData = [];
-                    for (let j = 0; j < 24; j++) {
-                        hourlyData.push({
-                            time: weatherData.hourly.time[i * 24 + j],
-                            temperature2m: weatherData.hourly.temperature2m[i * 24 + j],
-                            precipitationProbability: weatherData.hourly.precipitationProbability[i * 24 + j],
-                            precipitation: weatherData.hourly.precipitation[i * 24 + j],
-                            weatherCode: weatherData.hourly.weatherCode[i * 24 + j],
-                            isDay: weatherData.hourly.isDay[i * 24 + j],
-                            metadata: weatherData.metadata,
-                        });
-                    }
-                    hourlyDataArray.push(hourlyData);
-                }
-                weatherData.hourlyData = hourlyDataArray;
-
-				//log the weather data
-                //console.log("weather.js: weather data fetched")
-				//console.log(weatherData);
-
-                resolve(weatherData);
-            })
-            .catch(error => {
-                reject(error);
-            });
-    });
+    } catch (error) {
+        console.error("Error in fetching or processing weather data:", error);
+        throw new Error("Failed to retrieve weather data");
+    }
 }
-
