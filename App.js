@@ -18,17 +18,10 @@ import * as Location from 'expo-location';
 import { useCalendars } from 'expo-localization';
 import fetchGeoLocation from './components/geoLocation.js';
 
-//TODO: remove spinner if error occurs
-//TODO: display errors to user
-//TODO: clean up the state variables ( use a reducer ?)
-//TODO: too many rerenders, optimize
-
 export default function App() {
 
   const colorScheme = useColorScheme()
   let theme = colorScheme == 'dark' ? darkTheme : lightTheme
-  //let theme = lightTheme
-  //let theme = darkTheme
 
   console.log("App.js: rerendering")
 
@@ -69,7 +62,7 @@ export default function App() {
   }, [city]);
 
   const geoLocationHandlePress = async () => {
-    if(isLoading){
+    if (isLoading) {
       return
     }
     console.log("geoLocationHandlePress called");
@@ -86,39 +79,41 @@ export default function App() {
 
 
   return (
-    <PaperProvider theme={theme}>
-      <Appbar.Header elevated="true">
-        <Appbar.Content title="Weather App" />
-      </Appbar.Header>
-      <Surface style={styles.main} >
-        <ScrollView style={styles.scroll}>
-          <Search onClick={(city) => { setCity(city) }} key={searchBarKey}></Search>
+    <StrictMode>
+      <PaperProvider theme={theme}>
+        <Appbar.Header elevated="true">
+          <Appbar.Content title="ReactWeather" />
+        </Appbar.Header>
+        <Surface style={styles.main} >
+          <ScrollView style={styles.scroll}>
+            <Search onClick={(city) => { setCity(city) }} key={searchBarKey}></Search>
 
-          <Button
-            mode='contained-tonal'
-            icon='map-marker'
-            onPress={() => { geoLocationHandlePress(); setSearchBarKey(searchBarKey + 1) }}
-            style={styles.button}
-          >
-            use current position
-          </Button>
+            <Button
+              mode='contained-tonal'
+              icon='map-marker'
+              onPress={() => { geoLocationHandlePress(); setSearchBarKey(searchBarKey + 1) }}
+              style={styles.button}
+            >
+              use current position
+            </Button>
 
-          {(isLoading) &&
-            <ActivityIndicator
-              style={styles.loading}
-              animating={true}
-              size='large'
-            />}
+            {(isLoading) &&
+              <ActivityIndicator
+                style={styles.loading}
+                animating={true}
+                size='large'
+              />}
 
-          {isLoaded && !isLoading &&
-            <>
-              <CurrentWeatherCard weatherData={weatherData["current"]} city={city} />
-              <Forecast weatherData={weatherData} />
-            </>
-          }
-        </ScrollView>
-        <StatusBar style="auto" />
-      </Surface>
-    </PaperProvider>
+            {isLoaded && !isLoading &&
+              <>
+                <CurrentWeatherCard weatherData={weatherData["current"]} city={city} />
+                <Forecast weatherData={weatherData} />
+              </>
+            }
+          </ScrollView>
+          <StatusBar style="auto" />
+        </Surface>
+      </PaperProvider>
+    </StrictMode>
   );
 }
