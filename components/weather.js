@@ -1,4 +1,5 @@
 import { fetchWeatherApi } from 'openmeteo';
+import { compareHoursTimezone, isToday } from './scripts/timeHelper';
 
 const forecast_days = 7;
 
@@ -82,8 +83,21 @@ export async function getWeatherData(city, calendar) {
         weatherData.dailyData = formatDailyData();
         weatherData.hourlyData = formatHourlyData();
 
+        //removing past hours form hourly data of today
+        const today = new Date();
+        const todayIndex = weatherData.hourlyData.findIndex((hour) => isToday(hour[0].time, timezone));
+        for( let i = 0; i < 24; i++) {
+            if(compareHoursTimezone(weatherData.hourlyData[todayIndex][0].time, today) < 0) {
+                weatherData.hourlyData[todayIndex].shift();
+            }
+            else {
+                break;
+            }
+        }
+
+
         // Logging for debug purposes
-        // console.log("weather.js: weather data fetched", weatherData);
+        // console.log(weatherData);
 
         return weatherData;
 

@@ -10,6 +10,7 @@ export default function Forecast(props){
 
     weatherData = props.weatherData
     //console.log(weatherData)
+    
     return(
         <View>
             <DailyWeatherBar onPress={(newDay)=>setDay(newDay)} weatherData={weatherData["dailyData"]} day={day} />

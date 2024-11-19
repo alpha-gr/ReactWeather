@@ -2,7 +2,7 @@
 import * as encoding from 'text-encoding'
 
 import { StatusBar } from 'expo-status-bar';
-import { ScrollView, View, useColorScheme } from 'react-native';
+import { FlatList, ScrollView, View, useColorScheme } from 'react-native';
 import React, { useEffect } from 'react';
 import CurrentWeatherCard from './components/CurrentWeatherCard.js';
 import styles from './styles.js';
@@ -85,32 +85,40 @@ export default function App() {
           <Appbar.Content title="ReactWeather" />
         </Appbar.Header>
         <Surface style={styles.main} >
-          <ScrollView style={styles.scroll}>
-            <Search onClick={(city) => { setCity(city) }} key={searchBarKey}></Search>
+          <FlatList
+            style={styles.scroll}
+            renderItem={({ item }) => <Text>{item}</Text>}
+            ListHeaderComponent={
+              <View>
+                <Search onClick={(city) => { setCity(city) }} key={searchBarKey}></Search>
 
-            <Button
-              mode='contained-tonal'
-              icon='map-marker'
-              onPress={() => { geoLocationHandlePress(); setSearchBarKey(searchBarKey + 1) }}
-              style={styles.button}
-            >
-              use current position
-            </Button>
+                <Button
+                  mode='contained-tonal'
+                  icon='map-marker'
+                  onPress={() => { geoLocationHandlePress(); setSearchBarKey(searchBarKey + 1) }}
+                  style={styles.button}
+                >
+                  use current position
+                </Button>
 
-            {(isLoading) &&
-              <ActivityIndicator
-                style={styles.loading}
-                animating={true}
-                size='large'
-              />}
+                {(isLoading) &&
+                  <ActivityIndicator
+                    style={styles.loading}
+                    animating={true}
+                    size='large'
+                  />}
 
-            {isLoaded && !isLoading &&
-              <>
-                <CurrentWeatherCard weatherData={weatherData["current"]} city={city} />
-                <Forecast weatherData={weatherData} />
-              </>
+                {isLoaded && !isLoading &&
+                  <>
+                    <CurrentWeatherCard weatherData={weatherData["current"]} city={city} />
+                    <Forecast weatherData={weatherData} />
+                  </>
+                }
+              </View>
             }
-          </ScrollView>
+          />
+
+
           <StatusBar style="auto" />
         </Surface>
       </PaperProvider>
