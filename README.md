@@ -1,5 +1,5 @@
 
-# ReactWeather
+# ReactWeather 🌤️
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
@@ -10,13 +10,15 @@
 ReactWeather is a simple React Native weather app that allows users to view real-time weather forecasts for various locations. It uses the OpenMeteo API to provide accurate and up-to-date data.\
 The application was developed during my bachelor's thesis in Computer Engineering @ unibo.
 
-## Live Demo
+## Live Demo 🚀
 
 You can view a working demo of this app on GitHub Pages:  
 [https://alpha-gr.github.io/ReactWeather](https://alpha-gr.github.io/ReactWeather)
 
+**Note:** Icons are not yet supported in the live demo.
 
-## Features
+
+## Features 
 
 - Display of current weather conditions
 - Short- and long-term forecasts
