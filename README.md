@@ -7,7 +7,7 @@
 <img src="assets/icon.png" alt="icon" width="200"/>
 </p>
 
-ReactWeather is a simple React Native weather app that allows users to view real-time weather forecasts for various locations. It uses the OpenMeteo API to provide accurate and up-to-date data.\
+ReactWeather is a simple React Native weather app that allows users to view real-time weather forecasts for various locations. It uses the [OpenMeteo](https://open-meteo.com/) API to provide accurate and up-to-date data.\
 The application was developed during my bachelor's thesis in Computer Engineering @ unibo.
 
 ## Live Demo 🚀
