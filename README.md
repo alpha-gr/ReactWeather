@@ -13,7 +13,7 @@ The application was developed during my bachelor's thesis in Computer Engineerin
 ## Live Demo
 
 You can view a working demo of this app on GitHub Pages:  
-[https://username.github.io/repository-name](https://username.github.io/repository-name)
+[https://alpha-gr.github.io/ReactWeather](https://alpha-gr.github.io/ReactWeather)
 
 
 ## Features
