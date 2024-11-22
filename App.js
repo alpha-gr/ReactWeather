@@ -2,7 +2,7 @@
 import * as encoding from 'text-encoding'
 
 import { StatusBar } from 'expo-status-bar';
-import { ScrollView, View, useColorScheme } from 'react-native';
+import { ScrollView, View, useColorScheme, useWindowDimensions } from 'react-native';
 import React, { useEffect } from 'react';
 import CurrentWeatherCard from './components/CurrentWeatherCard.js';
 import styles from './styles.js';
@@ -19,6 +19,9 @@ import { useCalendars } from 'expo-localization';
 import fetchGeoLocation from './components/geoLocation.js';
 
 export default function App() {
+
+  const { height, width } = useWindowDimensions();
+  const isLargeScreen = width >= 1024;
 
   const colorScheme = useColorScheme()
   let theme = colorScheme == 'dark' ? darkTheme : lightTheme
@@ -85,7 +88,10 @@ export default function App() {
           <Appbar.Content title="ReactWeather" />
         </Appbar.Header>
         <Surface style={styles.main} >
-          <ScrollView style={styles.scroll}>
+          <ScrollView
+            style={[styles.scroll, isLargeScreen && styles.mainLargeScreen]}
+            showsVerticalScrollIndicator={false}
+          >
             <Search onClick={(city) => { setCity(city) }} key={searchBarKey}></Search>
 
             <Button

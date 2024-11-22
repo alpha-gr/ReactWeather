@@ -76,5 +76,8 @@ hourCard:{
   cityList: {
     padding: 10,
   },
+  mainLargeScreen: {
+    width: '40%', // Riduce la larghezza su schermi grandi
+  },
 });
 
