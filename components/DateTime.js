@@ -1,31 +1,50 @@
-import { View} from 'react-native'
+import { View } from 'react-native'
 import { Card, Text } from 'react-native-paper'
 
 import { isToday } from './scripts/timeHelper'
+import { useMemo } from 'react'
 
 
-export default function DateTime(props){
-
+export default function DateTime(
+    props = {
+        weatherData: {},
+        showTime: false,
+        showDate: false
+    }
+) {
+    showTime = props.showTime
+    showDate = props.showDate
     weatherData = props.weatherData
     metadata = weatherData["metadata"]
     
-    timeFormatOptions= {hour: '2-digit', minute: '2-digit', timeZone: metadata["timezone"]}
-    dateFormatOptions = {weekday: 'short', timeZone: metadata["timezone"]}
+    // Calcola solo se timezone cambia
+    const timeFormatOptions = useMemo(
+        () => ({ hour: '2-digit', minute: '2-digit', timeZone: metadata.timezone }),
+        [metadata.timezone]
+    );
 
-    showTime = props.showTime == undefined ? false : props.showTime 
-    showDate = props.showDate == undefined ? false : props.showDate
+    const dateFormatOptions = useMemo(
+        () => ({ weekday: 'short', timeZone: metadata.timezone }),
+        [metadata.timezone]
+    );
 
-    //isDateToday = weatherData["time"].getDate() == new Date().getDate() //TODO fix for different timezones
-
+    var formattedTime = ""
+    if (showTime) {
+        formattedTime = weatherData["time"].toLocaleTimeString(undefined, timeFormatOptions);
+    }
+    var formattedDate = ""
+    if (showDate) {
+        formattedDate = weatherData["time"].toLocaleDateString(undefined, dateFormatOptions);
+    }
     isDateToday = false
-    if(showDate){
+    if (showDate) {
         isDateToday = isToday(weatherData["time"], weatherData["metadata"])
     }
 
     return (
-        <View style={{padding:10, alignSelf:'center'}}> 
-            {showTime && <Text variant='titleMedium'>{weatherData["time"].toLocaleTimeString(undefined, timeFormatOptions)}</Text>}
-            {showDate && !isDateToday && <Text>{weatherData["time"].toLocaleDateString(undefined, dateFormatOptions)}</Text>}
+        <View style={{ padding: 10, alignSelf: 'center' }}>
+            {showTime && <Text variant='titleMedium'>{formattedTime}</Text>}
+            {showDate && !isDateToday && <Text>{formattedDate}</Text>}
             {showDate && isDateToday && <Text>Today</Text>}
         </View>
     )
