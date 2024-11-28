@@ -2,7 +2,7 @@
 import * as encoding from 'text-encoding'
 
 import { StatusBar } from 'expo-status-bar';
-import { ScrollView, View, useColorScheme, useWindowDimensions } from 'react-native';
+import { Image, ScrollView, View, useColorScheme, useWindowDimensions } from 'react-native';
 import React, { useEffect } from 'react';
 import CurrentWeatherCard from './components/CurrentWeatherCard.js';
 import styles from './styles.js';
@@ -17,6 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 import { useCalendars } from 'expo-localization';
 import fetchGeoLocation from './components/geoLocation.js';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function App() {
 
@@ -96,9 +97,15 @@ export default function App() {
 
             <Button
               mode='contained-tonal'
-              icon='map-marker'
               onPress={() => { geoLocationHandlePress(); setSearchBarKey(searchBarKey + 1) }}
               style={styles.button}
+              icon={({ size, color }) => (
+                <Image
+                  source= {require('./assets/icons/location-dot.svg')}
+                  style={{ width: size, height: size, tintColor: color }}
+                  resizeMode="contain"
+                />
+              )}
             >
               use current position
             </Button>
